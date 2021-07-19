@@ -9,6 +9,7 @@
     <script src="jspsych-6.0.4/plugins/jspsych-fullscreen.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/confetti-js@0.0.18/dist/index.min.js"></script>
     <link href="jspsych-6.0.4/css/jspsych_digitspan.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -29,7 +30,7 @@
 
 //----- CUSTOMIZABLE VARIABLES -----------------------------------------
 
-  nTrials = 14 // number of trials in the test
+  nTrials = 1 // number of trials in the test
   minSetSize = 3 // starting digit length
   stimuli_duration = 1000 // number of miliseconds to display each digit
   recall_duration = null // number of miliseconds to allow recall. If null, there is no time limit.
@@ -143,20 +144,26 @@ var recall = {
 }
 
 var feedback = {
-  type: 'html-keyboard-response',
-  stimulus: function(){
-    var text = ""
+  type: 'instructions',
+  pages: function(){
+    var text = "<canvas id=\"confetti-canvas\" style=\"position: absolute;top:0;left:0;width:100vw;height:100vh;z-index:-1000;\"></canvas>"
     var accuracy = jsPsych.data.get().last(1).values()[0].accuracy
     if (accuracy==1){
+      setTimeout(() => {
+        var confettiSettings = { target: 'confetti-canvas' };
+        var confetti = new ConfettiGenerator(confettiSettings);
+        confetti.render();
+      }, 100);
       text += '<div style="font-size:35px; color:rgb(0 220 0)"><b>Correct</div>'
     } else {
       text += '<div style="font-size:35px; color:rgb(240 0 0)"><b>Incorrect</div>'
     }
     //text += '<div style="font-size:30px; color:rgb(0 0 0)"><br><br>New trial starting now.</div>'
-    return text
+    return [text]
   },
-  choices: jsPsych.NO_KEYS,
-  trial_duration: 1000
+  allow_backward: false,
+  button_label_next: "Next",
+  show_clickable_nav: true
 }
 
 var conclusion = {
