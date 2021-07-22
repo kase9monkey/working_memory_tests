@@ -1,20 +1,3 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyD_OSt5nPO2J3_utPClw0mkTG33LXSQkfo",
-    authDomain: "working-memory-tests.firebaseapp.com",
-    projectId: "working-memory-tests",
-    storageBucket: "working-memory-tests.appspot.com",
-    messagingSenderId: "180004817043",
-    appId: "1:180004817043:web:f3de06e2dad40bfbe2a566",
-    measurementId: "G-L5E2H06G3M"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-function writeDate(data) {
-    db.collection('results').add(data)
-}
-
 /*
     This is a web-based digit span working memory test.
     It is modelled after the forward digit span test described in Woods et al (2011) [https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2978794/].
@@ -30,7 +13,7 @@ function writeDate(data) {
 
 //----- CUSTOMIZABLE VARIABLES -----------------------------------------
 
-nTrials = 1 // number of trials in the test
+nTrials = 10 // number of trials in the test
 minSetSize = 3 // starting digit length
 stimuli_duration = 1000 // number of miliseconds to display each digit
 recall_duration = null // number of miliseconds to allow recall. If null, there is no time limit.
@@ -206,6 +189,19 @@ var dataLog = {
     stimulus: " ",
     trial_duration: 100,
     on_finish: function() {
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_OSt5nPO2J3_utPClw0mkTG33LXSQkfo",
+            authDomain: "working-memory-tests.firebaseapp.com",
+            projectId: "working-memory-tests",
+            storageBucket: "working-memory-tests.appspot.com",
+            messagingSenderId: "180004817043",
+            appId: "1:180004817043:web:f3de06e2dad40bfbe2a566",
+            measurementId: "G-L5E2H06G3M"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         var data = jsPsych.data.get().filter({trial_type: 'digit-span-recall'});
         const json = {
             trialData: JSON.parse(data.json()),
@@ -215,7 +211,7 @@ var dataLog = {
             time: Date.now()
         }
 
-        writeDate(json);
+        db.collection('results').add(json)
     }
 }
 
