@@ -4,7 +4,7 @@
     <script src="jspsych-6.0.4/jspsych.js"></script>
     <script src="jspsych-6.0.4/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.0.4/plugins/jspsych-digit-span-recall.js"></script>
-    <script src="jspsych-6.0.4/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.0.4/plugi2ns/jspsych-survey-text.js"></script>
     <script src="jspsych-6.0.4/plugins/jspsych-instructions.js"></script>
     <script src="jspsych-6.0.4/plugins/jspsych-fullscreen.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -30,12 +30,12 @@
 
 //----- CUSTOMIZABLE VARIABLES -----------------------------------------
 
-  nTrials = 1 // number of trials in the test
+  nTrials = 10 // number of trials in the test
   minSetSize = 3 // starting digit length
   stimuli_duration = 1000 // number of miliseconds to display each digit
   recall_duration = null // number of miliseconds to allow recall. If null, there is no time limit.
   file_name = null // file name for data file. if null, a default name consisting of the participant ID and a unique number is chosen.
-  local = true // save the data file locally.
+  local = false // save the data file locally.
               // If this test is being run online (e.g., on MTurk), true will cause the file to be downloaded to the participant's computer.
               // If this test is on a server, and you wish to save the data file to that server, change this to false.
               // If changed to false, ensure that the php file (its in the directory!) and the empty "data" folder has also been appropriately uploaded to the server.
@@ -61,9 +61,10 @@
       partN = jsPsych.data.get().last(1).values()[0].partNum
       partN = partN.replace(/['"]+/g,'')
 //      console.log(partN[0])
-    }
+    } 
   }
 
+l
 // instruction page
 var instructions = {
     type: 'instructions',
@@ -215,7 +216,7 @@ var dataLog = {
     if (local){
       data.localSave('csv', file_name )
     } else {
-      saveData(file_name, data.csv());
+      saveData(file_name, data.json());
     }
   }
 }
